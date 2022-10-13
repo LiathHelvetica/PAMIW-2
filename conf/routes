@@ -1,0 +1,5 @@
+GET     /competitor-test        controllers.CompetitorController.testGetCompetitor
+GET     /competitor             controllers.CompetitorController.getCompetitor
+POST    /competitor             controllers.CompetitorController.postCompetitor
+DELETE  /competitor/:id         controllers.CompetitorController.deleteCompetitor(id)
+PUT     /competitor/:id         controllers.CompetitorController.putCompetitor(id)
