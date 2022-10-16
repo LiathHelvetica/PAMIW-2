@@ -7,6 +7,7 @@ import scalikejdbc.DB
 import scalikejdbc.ParameterBinder
 import scalikejdbc.SQLSyntax
 import scalikejdbc.SQLSyntaxSupport
+import scalikejdbc.scalikejdbcSQLInterpolationImplicitDef
 import scalikejdbc.{insert => dslInsert}
 import scalikejdbc.{delete => dslDelete}
 import scalikejdbc.{update => dslUpdate}
@@ -89,7 +90,7 @@ object Competitor extends SQLSyntaxSupport[Competitor] {
         .from(Competitor as c)
         .where(filter)
         .append(orderBySyntax)
-        .limit(limit.getOrElse(99999))
+        .append(limit.map(v => sqls"limit $v").getOrElse(sqls""))
         .offset(offset.getOrElse(0))
     }.map(rs => {
       new Competitor(
