@@ -12,6 +12,7 @@ import scalikejdbc.{delete => dslDelete}
 import scalikejdbc.{update => dslUpdate}
 import scalikejdbc.{select => dslSelect}
 import scalikejdbc.withSQL
+import utils.IdGenerator.generateId
 
 import java.time.LocalDate
 
@@ -29,23 +30,38 @@ case class Competitor(
   }
 }
 
+case class CompetitorDTO(
+  id: Option[String],
+  name: Option[String],
+  surname: Option[String],
+  country: Option[String],
+  birthDate: Option[LocalDate],
+  height: Option[Int],
+  weight: Option[Int]
+)
+
 object Competitor extends SQLSyntaxSupport[Competitor] {
 
   override val schemaName: Option[String] = Some("public")
   override val tableName: String = "competitors"
 
-  def insert(competitor: Competitor): Unit = DB.localTx {
-    implicit session => withSQL {
-      dslInsert.into(Competitor).namedValues(
-        column.id -> competitor.id,
-        column.name -> competitor.name,
-        column.surname -> competitor.surname,
-        column.country -> competitor.country,
-        column.birthDate -> competitor.birthDate,
-        column.height -> competitor.height,
-        column.weight -> competitor.weight
-      )
-    }.update().apply()
+  def insert(competitor: CompetitorDTO): String = {
+    val id = generateId
+    DB.localTx {
+      implicit session =>
+        withSQL {
+          dslInsert.into(Competitor).namedValues(
+            column.id -> id,
+            column.name -> competitor.name,
+            column.surname -> competitor.surname,
+            column.country -> competitor.country,
+            column.birthDate -> competitor.birthDate,
+            column.height -> competitor.height,
+            column.weight -> competitor.weight
+          )
+        }.update().apply()
+    }
+    id
   }
 
   def delete(id: String): Unit = DB.localTx {

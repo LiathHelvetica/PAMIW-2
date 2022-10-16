@@ -5,6 +5,7 @@ import logic.Order
 import logic.Order.orderByAscSql
 import logic.Order.orderByDescSql
 import models.Competitor
+import models.CompetitorDTO
 import play.api.mvc.AbstractController
 import play.api.mvc.Action
 import play.api.mvc.AnyContent
@@ -19,7 +20,6 @@ import utils.UrlUtils.readQuery
 import java.time.LocalDate.now
 import javax.inject.Inject
 import javax.inject.Singleton
-import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
@@ -30,6 +30,7 @@ class CompetitorController @Inject()(controllerComponents: ControllerComponents)
 
   // omit Json.toJson calls
   implicit val competitorFormatter: OFormat[Competitor] = Json.format[Competitor]
+  implicit val competitorDtoFormatter: OFormat[CompetitorDTO] = Json.format[CompetitorDTO]
 
   def testGetCompetitor: Action[AnyContent] = Action {
     Ok(Json.toJson(Competitor("a", "b", "c", "d", now(), 0, 0)))
@@ -37,9 +38,9 @@ class CompetitorController @Inject()(controllerComponents: ControllerComponents)
 
   def postCompetitor: Action[AnyContent] = Action {
     request => {
-      val competitor = request.body.asJson.get.as[Competitor]
-      Competitor.insert(competitor)
-      Created(competitor.toJson)
+      val competitor = request.body.asJson.get.as[CompetitorDTO]
+      val id = Competitor.insert(competitor)
+      Created(id)
     }
   }
 
