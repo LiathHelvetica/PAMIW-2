@@ -13,7 +13,10 @@ libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "42.5.0",
   "org.scalikejdbc" %% "scalikejdbc" % "3.5.0",
   "org.scalikejdbc" %% "scalikejdbc-config" % "3.5.0",
-  "org.scalikejdbc" %% "scalikejdbc-play-initializer" % "2.8.0-scalikejdbc-3.5"
+  "org.scalikejdbc" %% "scalikejdbc-play-initializer" % "2.8.0-scalikejdbc-3.5",
+  "com.typesafe.slick" %% "slick-codegen" % "3.4.1",
+  "com.typesafe.slick" %% "slick" % "3.4.0",
+  "io.github.nafg.slick-migration-api" %% "slick-migration-api" % "0.9.0"
 )
 
 enablePlugins(ScalikejdbcPlugin)
